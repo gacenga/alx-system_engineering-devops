@@ -1,2 +1,2 @@
 #!/bin/bash 
-ls -lt|head|uniq|sort -hr
+find . -type f | sort -r | head -n 10
