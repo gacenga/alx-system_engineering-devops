@@ -1,2 +1,2 @@
 #!/bin/bash 
-ls -pamx |LC_COLLATE=C sort
+ls -xmap
