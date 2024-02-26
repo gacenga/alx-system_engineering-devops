@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# This script is displaying "Best School" 10 times
+c=0
+while [ $c -le 9 ]; do
+    if [ $c -eq 3 ]
+    then
+	echo "bad luck"
+    elif [ $c -eq 7 ]
+    then
+	echo "good luck"
+    else
+	echo "Best School"
+    fi
+    ((c++))
+done
