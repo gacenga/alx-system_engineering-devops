@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-11;rgb:0000/0000/0000# stops 4-to_infinity_and_beyond process
+# stops 4-to_infinity_and_beyond process
 PID=$(cat /tmp/4-to_infinity_and_beyond.pid)
 kill "$PID"
