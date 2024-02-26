@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# display current running processes even those without TTY
+ps axjf
