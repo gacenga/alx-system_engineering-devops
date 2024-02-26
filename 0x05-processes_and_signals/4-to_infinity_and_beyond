@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Prints To infinity and beyond indefinitely
+echo $$ > /tmp/4-to_infinity_and_beyond.pid
 i=1
 while [ "$i" -gt 0 ]; do
 echo "To infinity and beyond"
