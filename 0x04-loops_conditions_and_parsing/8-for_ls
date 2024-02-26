@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script is displaying "Best School" 10 times
+file_list=$(ls -p | grep -v '/')
+for file in $file_list
+do
+    if [[ $file == *-* ]]; then
+	display_name=$(echo "$file" | cut -d'-' -f2-)
+	echo "$display_name"
+    else
+	echo "$file"
+    fi
+done
