@@ -1,42 +1,18 @@
 #!/usr/bin/python3
-
-"""
-
-    API that fetches info about to do list
-
-"""
-
+"""Exports to-do list information for a given employee ID to CSV format."""
+import csv
 import requests
 import sys
-import csv
 
-base_url = 'https://jsonplaceholder.typicode.com'
+if __name__ == "__main__":
+    user_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
+    todos = requests.get(url + "todos", params={"userId": user_id}).json()
 
-def get_to_do(employee_id):
-   """ gets employee name and tasks """
-   emp_rq = requests.get(f"{base_url}/users/{employee_id}")
-   todo_rq = requests.get(f"{base_url}/todos?userid={employee_id}")
-
-   if emp_rq.status_code != 200 or todo_rq.status_code != 200:
-       print("Error fetching data")
-       return
-
-   emp = emp_rq.json()
-   todo = todo_rq.json()
-
-   emp_name = emp.get("name")
-
-   csv_filename = f"{employee_id}.csv"
-   with open(csv_filename, mode='w', newline='') as file:
-       for n in todo:
-           file.write(f'"{employee_id}","{emp.get("name")}","{n.get("completed")}","{n.get("title")}"\n')
-       
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
-    try:
-        employee_id = int(sys.argv[1])
-        get_to_do(employee_id)
-    except ValueError:
-        print("Employee id must be integer")
+    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        [writer.writerow(
+            [user_id, username, t.get("completed"), t.get("title")]
+         ) for t in todos]
