@@ -8,29 +8,29 @@
 
 import requests
 import sys
+import csv
 
 base_url = 'https://jsonplaceholder.typicode.com'
 
 def get_to_do(employee_id):
    """ gets employee name and tasks """
    emp_rq = requests.get(f"{base_url}/users/{employee_id}")
-   todo_rq = requests.get(f"{base_url}/todos")
+   todo_rq = requests.get(f"{base_url}/todos?userid={employee_id}")
 
    if emp_rq.status_code != 200 or todo_rq.status_code != 200:
        print("Error fetching data")
        return
 
    emp = emp_rq.json()
-   todo = list(filter(lambda x: x.get('userId') == employee_id, todo_rq.json()))
+   todo = todo_rq.json()
 
    emp_name = emp.get("name")
-   total_todo = len(todo)
-   done_todo = [n for n in todo if n.get("completed")]
 
-   print(f"Employee {emp_name} is done with tasks({len(done_todo)}/{total_todo}):")
-   for n in done_todo:
-       print(f"\t{n.get('title')}")
-
+   csv_filename = f"{employee_id}.csv"
+   with open(csv_filename, mode='w', newline='') as file:
+       for n in todo:
+           file.write(f'"{employee_id}","{emp.get("name")}","{n.get("completed")}","{n.get("title")}"\n')
+       
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")

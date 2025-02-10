@@ -8,28 +8,29 @@
 
 import requests
 import sys
+import json
 
 base_url = 'https://jsonplaceholder.typicode.com'
 
 def get_to_do(employee_id):
    """ gets employee name and tasks """
    emp_rq = requests.get(f"{base_url}/users/{employee_id}")
-   todo_rq = requests.get(f"{base_url}/todos")
+   todo_rq = requests.get(f"{base_url}/todos?userid={employee_id}")
 
    if emp_rq.status_code != 200 or todo_rq.status_code != 200:
        print("Error fetching data")
        return
 
    emp = emp_rq.json()
-   todo = list(filter(lambda x: x.get('userId') == employee_id, todo_rq.json()))
+   todo = todo_rq.json()
 
    emp_name = emp.get("name")
    total_todo = len(todo)
-   done_todo = [n for n in todo if n.get("completed")]
 
-   print(f"Employee {emp_name} is done with tasks({len(done_todo)}/{total_todo}):")
-   for n in done_todo:
-       print(f"\t{n.get('title')}")
+   json_filename = f"{employee_id}.json"
+   data = { f"{employee_id}": [{"task": f'{n.get("title")}', "completed": n.get("completed"), "username": f"{emp_name}"} for n in todo]}
+   with open(json_filename, mode='w') as file:
+       json.dump(data, file)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
