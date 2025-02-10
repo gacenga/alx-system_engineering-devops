@@ -1,42 +1,14 @@
 #!/usr/bin/python3
-
-"""
-
-    API that fetches info about to do list
-
-"""
-
+"""Returns to-do list information for a given employee ID."""
 import requests
 import sys
 
-base_url = 'https://jsonplaceholder.typicode.com'
+if __name__ == "__main__":
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(sys.argv[1])).json()
+    todos = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
 
-def get_to_do(employee_id):
-   """ gets employee name and tasks """
-   emp_rq = requests.get(f"{base_url}/users/{employee_id}")
-   todo_rq = requests.get(f"{base_url}/todos")
-
-   if emp_rq.status_code != 200 or todo_rq.status_code != 200:
-       print("Error fetching data")
-       return
-
-   emp = emp_rq.json()
-   todo = list(filter(lambda x: x.get('userId') == employee_id, todo_rq.json()))
-
-   emp_name = emp.get("name")
-   total_todo = len(todo)
-   done_todo = [n for n in todo if n.get("completed")]
-
-   print(f"Employee {emp_name} is done with tasks({len(done_todo)}/{total_todo}):")
-   for n in done_todo:
-       print(f"\t{n.get('title')}")
-
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
-    try:
-        employee_id = int(sys.argv[1])
-        get_to_do(employee_id)
-    except ValueError:
-        print("Employee id must be integer")
+    completed = [t.get("title") for t in todos if t.get("completed") is True]
+    print("Employee {} is done with tasks({}/{}):".format(
+        user.get("name"), len(completed), len(todos)))
+    [print("\t {}".format(c)) for c in completed]
