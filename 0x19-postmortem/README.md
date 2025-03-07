@@ -1,4 +1,5 @@
 # 🚨 Postmortem: The Great GDP Meltdown of 2024 🚨<br>
+![Website Outage](image_1.webp)
 # Issue Summary <br>
 Duration: 3 hours and 27 minutes (07:15 AM – 10:42 AM EAT) <br>
 Impact: The Jua Economy website’s GDP visualization page went rogue, displaying Kenya's GDP as -$42 billion instead of the usual optimistic trillions. Users experienced a mix of shock, confusion, and a sudden urge to move to Uganda. About 73% of users were affected, with most abandoning the site faster than a matatu leaves the stage.<br>
